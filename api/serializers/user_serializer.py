@@ -3,19 +3,17 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-    password_confirmation = serializers.CharField(write_only=True)
+    is_admin = serializers.BooleanField(source='is_staff', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'password_confirmation', 'first_name', 'last_name']
-        read_only_fields = ['id']
+        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'is_admin']
+        read_only_fields = ['id', 'is_admin']
         extra_kwargs = {
             'email': {'required': True},
         }
     
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_confirmation']:
-            raise serializers.ValidationError({'password': 'Password fields did not match.'})
         return attrs
     
     def validate_email(self, value):
@@ -29,7 +27,6 @@ class UserSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
-        validated_data.pop('password_confirmation')
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -40,7 +37,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        validated_data.pop('password_confirmation', None)
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)

@@ -25,17 +25,14 @@ class RegisterView(generics.CreateAPIView):
         # Create token for the new user
         token, created = Token.objects.get_or_create(user=user)
         
+        # Use serializer to get consistent user data including is_admin
+        user_serializer = UserSerializer(user)
+        
         return Response({
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-            },
+            'user': user_serializer.data,
             'token': token.key,
             'message': 'User registered successfully'
-            
-        }, status=status.HTTP_201_CREATED,
-        )
+        }, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -67,12 +64,11 @@ def login_view(request):
     # Get or create token
     token, created = Token.objects.get_or_create(user=user)
     
+    # Use serializer to get consistent user data including is_admin
+    user_serializer = UserSerializer(user)
+    
     return Response({
-        'user': {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-        },
+        'user': user_serializer.data,
         'token': token.key,
         'message': 'Login successful'
     })
