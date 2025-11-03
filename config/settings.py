@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',  # CORS headers support
     'api',
 ]
 
@@ -62,10 +63,34 @@ REST_FRAMEWORK = {
     ],
 }
 
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    'https://dashboard-navy-sigma.vercel.app',  # Your Vercel frontend
+    'http://localhost:3000',  # Local development
+    'http://localhost:5173',  # Vite local development
+]
+
+# Allow credentials (cookies, authorization headers, etc.)
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow specific headers
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # CORS middleware - should be before CommonMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -154,4 +179,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CSRF Settings for API
 CSRF_TRUSTED_ORIGINS = [
     'https://blog-api-bqtr.onrender.com',
+    'https://dashboard-navy-sigma.vercel.app',  # Your Vercel frontend
 ]

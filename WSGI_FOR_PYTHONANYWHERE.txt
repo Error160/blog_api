@@ -1,0 +1,69 @@
+===============================================
+COPY THIS INTO PYTHONANYWHERE WSGI FILE
+===============================================
+
+INSTRUCTIONS:
+1. Go to PythonAnywhere Web tab
+2. Click on your WSGI configuration file link
+3. DELETE everything in that file
+4. COPY and PASTE the code below
+5. REPLACE "YOUR_USERNAME" with your actual PythonAnywhere username (2 places)
+6. Save the file
+7. Click the green "Reload" button
+
+===============================================
+WSGI CODE - COPY FROM HERE ↓
+===============================================
+
+# +++++++++++ DJANGO +++++++++++
+import os
+import sys
+
+# Add your project directory to the sys.path
+path = '/home/YOUR_USERNAME/dummy_api'  # ⚠️ CHANGE YOUR_USERNAME
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+# Set environment variables
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+
+# Activate your virtual environment
+virtualenv_path = '/home/YOUR_USERNAME/dummy_api/venv'  # ⚠️ CHANGE YOUR_USERNAME
+activate_this = os.path.join(virtualenv_path, 'bin/activate_this.py')
+
+# For Python 3.x
+if os.path.exists(activate_this):
+    with open(activate_this) as f:
+        exec(f.read(), {'__file__': activate_this})
+
+# Import Django WSGI application
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+===============================================
+COPY UP TO HERE ↑
+===============================================
+
+EXAMPLE (if your PythonAnywhere username is "johndoe"):
+
+path = '/home/johndoe/dummy_api'
+virtualenv_path = '/home/johndoe/dummy_api/venv'
+
+===============================================
+AFTER CONFIGURING WSGI:
+===============================================
+
+1. In Web tab, set Virtualenv path:
+   /home/YOUR_USERNAME/dummy_api/venv
+
+2. In Web tab, add Static files:
+   URL: /static/
+   Directory: /home/YOUR_USERNAME/dummy_api/staticfiles
+
+3. Click the green "Reload" button
+
+4. Visit: https://YOUR_USERNAME.pythonanywhere.com/api/
+
+===============================================
+
+
