@@ -37,6 +37,17 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+# Add Vercel domains
+VERCEL_URL = os.environ.get('VERCEL_URL')
+if VERCEL_URL:
+    ALLOWED_HOSTS.append(VERCEL_URL)
+
+# Add common Vercel patterns
+ALLOWED_HOSTS.extend([
+    '.vercel.app',
+    '.now.sh',
+])
+
 
 # Application definition
 
@@ -181,3 +192,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://blog-api-bqtr.onrender.com',
     'https://dashboard-navy-sigma.vercel.app',  # Your Vercel frontend
 ]
+
+# Add Vercel API domain if available
+if VERCEL_URL:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{VERCEL_URL}')
