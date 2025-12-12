@@ -48,28 +48,45 @@ Vercel will auto-detect your project, but verify these settings:
 
 **Before clicking Deploy**, add your environment variables:
 
-1. In the project configuration page, scroll down to **"Environment Variables"**
-2. Click **"Add"** for each variable:
+1. In the project configuration page, scroll down to **"Environment Variables"** section
+2. You'll see an **"Add"** or **"Add Variable"** button - click it
+3. A form will appear with fields for Name, Value, and Environment checkboxes
 
-   **Required Variables:**
-   - **Name**: `SECRET_KEY`
-     - **Value**: Your Django secret key (generate a new one for production)
-     - **Environment**: Select all (Production, Preview, Development)
+   **Required Variables (add each one separately):**
    
-   - **Name**: `DEBUG`
-     - **Value**: `False` (for production)
-     - **Environment**: Production only
+   **Variable 1: SECRET_KEY**
+   - Click **"Add"** button
+   - **Name/Key**: Type `SECRET_KEY` (exactly, case-sensitive)
+   - **Value**: 
+     - Paste your Django secret key, OR
+     - Generate one by running: `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
+   - **Environment**: Check all three boxes (✅ Production, ✅ Preview, ✅ Development)
+   - Click **"Add"** or **"Save"** to save this variable
    
-   - **Name**: `DATABASE_URL`
-     - **Value**: Your database connection string (e.g., `postgresql://user:password@host:port/dbname`)
-     - **Environment**: Select all
+   **Variable 2: DEBUG**
+   - Click **"Add"** button again
+   - **Name/Key**: Type `DEBUG`
+   - **Value**: Type `False` (capital F, lowercase rest)
+   - **Environment**: Check ✅ Production only (uncheck Preview and Development)
+   - Click **"Add"** to save
    
-   **Optional but Recommended:**
-   - **Name**: `VERCEL_URL`
-     - **Value**: Leave empty (Vercel sets this automatically)
-     - **Environment**: All
+   **Variable 3: DATABASE_URL**
+   - Click **"Add"** button again
+   - **Name/Key**: Type `DATABASE_URL`
+   - **Value**: Your database connection string
+     - Format: `postgresql://username:password@host:port/database_name`
+     - **For Supabase**: See `SUPABASE_SETUP.md` for detailed instructions on getting your connection string
+     - **Quick Supabase steps**:
+       1. Go to [supabase.com](https://supabase.com) and create account/project
+       2. Settings → Database → Copy connection string
+       3. Replace `[YOUR-PASSWORD]` with your actual password
+     - For other providers: Check their documentation for connection strings
+   - **Environment**: Check all three (✅ Production, ✅ Preview, ✅ Development)
+   - Click **"Add"** to save
 
-3. Click **"Add"** after entering each variable
+4. **Verify**: You should now see a list with all three variables before clicking Deploy
+
+**💡 Detailed instructions**: See `HOW_TO_ADD_ENV_VARS.md` for a complete step-by-step guide with visual descriptions.
 
 ### Step 5: Deploy
 
@@ -117,10 +134,14 @@ vercel --prod
 Vercel serverless functions are stateless and have execution time limits. For production:
 
 1. **Use an external database**: Vercel doesn't support persistent file storage, so you cannot use SQLite. Use:
-   - PostgreSQL (recommended): Use services like [Supabase](https://supabase.com), [Neon](https://neon.tech), or [Railway](https://railway.app)
-   - MySQL: Use services like [PlanetScale](https://planetscale.com)
+   - **PostgreSQL (recommended)**: 
+     - [Supabase](https://supabase.com) - Free tier, easy setup (see `SUPABASE_SETUP.md` for guide)
+     - [Neon](https://neon.tech) - Serverless PostgreSQL
+     - [Railway](https://railway.app) - Simple deployment
+   - **MySQL**: Use services like [PlanetScale](https://planetscale.com)
 
 2. **Update DATABASE_URL**: Set the `DATABASE_URL` environment variable in Vercel with your database connection string.
+   - **📖 Supabase Setup Guide**: See `SUPABASE_SETUP.md` for step-by-step instructions on creating a Supabase database and getting the connection URL.
 
 ### Static Files
 
