@@ -180,7 +180,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # WhiteNoise configuration for static files in production
+# Note: For Vercel, static files are handled by WhiteNoise
+# The staticfiles directory warning is normal if you haven't run collectstatic
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Suppress staticfiles directory warning on Vercel (serverless environment)
+# The directory will be created automatically when needed
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
